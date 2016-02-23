@@ -116,6 +116,3 @@ def _fill_widget(widget, data):
 
     widget.clear()
     _fill_item(widget.invisibleRootItem(), data)
-
-
-show()
