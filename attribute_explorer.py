@@ -89,5 +89,33 @@ def _fill_item(item, data):
         for value in data:
             child = QtGui.QTreeWidgetItem()
             item.addChild(child)
-            if type(value) is dic
-    [pasted text truncated for security]
+            if type(value) is dict:     
+                child.setText(0, '[dict]')
+                _fill_item(child, value)
+            elif type(value) is list:
+                child.setText(0, '[list]')
+                _fill_item(child, value)
+            else:
+                child.setText(0, unicode(value))
+            child.setExpanded(False)
+
+    else:
+        child = QtGui.QTreeWidgetItem()
+        child.setText(0, unicode(data))
+        item.addChild(child)
+
+
+def _fill_widget(widget, data):
+    """Populate `widget` with data from `data
+
+    Arguments:
+        widget (QListWidget): Parent view
+        data (dict): Dictionary of data
+
+    """
+
+    widget.clear()
+    _fill_item(widget.invisibleRootItem(), data)
+
+
+show()
