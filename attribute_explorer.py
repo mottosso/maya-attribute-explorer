@@ -19,9 +19,10 @@ def show():
         return cmds.warning("Select a node to inspect")
 
     attrs = _parse_node(node)
-    
-    parent = {o.objectName(): o for o in QtGui.qApp.topLevelWidgets()}["MayaWindow"]
-    
+
+    parent = {o.objectName(): o for o in QtGui.qApp.topLevelWidgets()}
+    parent = parent["MayaWindow"]
+
     window = QtGui.QDialog(parent)
     window.setWindowTitle("Inspect \"%s\"" % node)
 
@@ -31,13 +32,13 @@ def show():
     for i in range(widget.invisibleRootItem().childCount()):
         child = widget.invisibleRootItem().child(i)
         widget.collapseItem(child)
-    
+
     layout = QtGui.QVBoxLayout(window)
     layout.addWidget(widget)
 
     window.show()
     window.resize(300, 700)
-    
+
     data["currentWidget"] = widget
     return widget
 
@@ -51,14 +52,14 @@ def _parse_node(node):
     """
 
     attrs = {}
-    
+
     for attr in cmds.listAttr(node):
         value = None
         try:
             value = cmds.getAttr(node + "." + attr, silent=True)
-        except RuntimeError:
-            value = "Cannot be read"
-    
+        except (RuntimeError, ValueError):
+            value = "Value cannot be read"
+
         attrs[attr] = value
 
     return attrs
